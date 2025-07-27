@@ -2,7 +2,7 @@ name: 'snowplow_unified_integration_tests'
 version: '0.5.5'
 config-version: 2
 
-profile: 'integration_tests'
+profile: integration_tests
 
 dispatch:
   - macro_namespace: dbt
@@ -25,25 +25,24 @@ quoting:
   schema: false
 
 models:
-  snowplow_unified_integration_tests:
+  source:
     +materialized: table
     bind: false
     +schema: "snplw_unified_int_tests"
-    source:
-      bigquery:
-        +enabled: "{{ target.type == 'bigquery' | as_bool() }}"
-      databricks:
-        +enabled: "{{ target.type in ['databricks'] | as_bool() }}"
-      default:
-        +enabled: "{{ target.type in ['redshift', 'postgres'] | as_bool() }}"
-      snowflake:
-        +enabled: "{{ target.type == 'snowflake' | as_bool() }}"
-      spark:
-        +enabled: "{{ target.type == 'spark' | as_bool() }}"
+    # bigquery:
+    #   +enabled: "{{ target.type == 'bigquery' | as_bool() }}"
+    # databricks:
+    #   +enabled: "{{ target.type in ['databricks'] | as_bool() }}"
+    default:
+      +enabled: "{{ target.type in ['redshift', 'postgres'] | as_bool() }}"
+    # snowflake:
+    #   +enabled: "{{ target.type == 'snowflake' | as_bool() }}"
+    # spark_iceberg:
+    #   +enabled: "{{ target.type == 'spark' | as_bool() }}"
 vars:
   snowplow_unified:
     snowplow__allow_null_dvce_tstamps: true
-    snowplow__atomic_schema: "{{target.schema ~ '_snplw_unified_int_tests'}}"
+    snowplow__atomic_schema: "{{target.schema}}"
     snowplow__events_table: snowplow_unified_events_stg
     snowplow__events: "{{ ref('snowplow_unified_events_stg') }}"
     snowplow__enable_web: true

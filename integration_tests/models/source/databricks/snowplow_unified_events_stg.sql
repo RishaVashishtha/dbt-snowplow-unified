@@ -1,3 +1,4 @@
+{{ config(enabled=(target.type == 'databricks')) }}
 {#
 Copyright (c) 2023-present Snowplow Analytics Ltd. All rights reserved.
 This program is licensed to you under the Snowplow Personal and Academic License Version 1.0,
