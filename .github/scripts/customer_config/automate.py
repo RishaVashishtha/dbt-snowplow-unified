@@ -10,7 +10,7 @@ def create_brand_project_dir(brand_name, base_dir: str):
     print(f"Created directory: {folder_name}")
     return path
 
-
+# Create standard dbt project structure
 def create_dbt_project_structure(project_dir: str):
     """Create standard dbt folders and starter files."""
     # Define standard dbt subfolders
