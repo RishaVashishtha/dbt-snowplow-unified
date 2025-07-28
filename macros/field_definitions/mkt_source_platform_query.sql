@@ -22,9 +22,9 @@ You may obtain a copy of the Snowplow Personal and Academic License Version 1.0 
 {% endmacro %}
 
 {% macro postgres__mkt_source_platform_query() %}
-  (regexp_match(page_urlquery, 'utm_source_platform=([^?&#]*)'))[1]
+  (regexp_match(page_urlquery::text, 'utm_source_platform=([^?&#]*)'))[1]
 {% endmacro %}
 
 {% macro snowflake__mkt_source_platform_query() %}
-  regexp_substr(page_urlquery, 'utm_source_platform=([^?&#]*)', 1, 1, 'e')
+  regexp_substr(page_urlquery::text, 'utm_source_platform=([^?&#]*)', 1, 1, 'e')
 {% endmacro %}
