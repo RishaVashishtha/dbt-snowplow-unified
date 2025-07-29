@@ -4,7 +4,7 @@ import os
 import shutil
 import yaml
 
-# Read and parse a JSON file to extract the brand name and create a project directory structure for dbt.
+# Read and parse a JSON file to extract the customer name and create a project directory structure for dbt.
 def load_json_config(file_path):
     """Loads and returns JSON data from the given file path."""
     with open(file_path, 'r') as file:
@@ -12,10 +12,10 @@ def load_json_config(file_path):
     return data
 
 
-# Create the brand folder based on the brand name from the JSON file
-def create_brand_project_dir(brand_name, base_dir: str):
+# Create the customer folder based on the customer name from the JSON file
+def create_customer_project_dir(customer_name, base_dir: str):
     # Convert to lowercase and replace spaces with underscores
-    folder_name = brand_name.lower().replace(' ', '_')
+    folder_name = customer_name.lower().replace(' ', '_')
     path = os.path.join(base_dir, folder_name)
     os.makedirs(path, exist_ok=True)
     print(f"Created directory: {folder_name}")
@@ -76,12 +76,14 @@ if __name__ == "__main__":
         result = load_json_config(filename)
         print(result)
         print(f"-------Loaded JSON configuration from: {filename}")
-        brand_name = result.get('brand_name')
-        project_dir = create_brand_project_dir(brand_name, dir_path) 
+        customer_name = result.get('brand_name')
+        if not customer_name:
+            raise KeyError("Missing 'brand_name' in JSON configuration.")
+        project_dir = create_customer_project_dir(customer_name, dir_path) 
         create_dbt_project_structure(project_dir)
         # Create dbt_project.yml with overrides
         overrides = {
-        'name': result.get('brand_name', '').lower().replace(' ', '_'),
+        'name': result.get('customer_name', '').lower().replace(' ', '_'),
 
         'vars': {
             'snowplow_unified': {
@@ -107,5 +109,5 @@ if __name__ == "__main__":
     except json.JSONDecodeError as e:
         print(f"Error: Failed to parse JSON. {e}")
     except KeyError:
-        print("Error: 'brand_name' missing from JSON.")
-        sys.exit(1)
+        print("Error: 'customer_name' missing from JSON.")
+        # sys.exit(1)
